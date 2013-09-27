@@ -6,12 +6,10 @@ import java.net.Socket;
 
 class FlasherThread implements Runnable{
 	Socket connectionSocket;
-	Boolean lock;
 	PrintWriter out;
-	public FlasherThread(Socket connectionSocket,Boolean lock) {
+	public FlasherThread(Socket connectionSocket) {
 		super();
 		this.connectionSocket = connectionSocket;
-		this.lock=lock;
 	}
 	
 	@Override
@@ -24,27 +22,25 @@ class FlasherThread implements Runnable{
 		
 		
 		while(true){
-				
-				synchronized (Command.getInstance()) {
-					while(Command.isExecute()){
-						try {
-							wait();
-						} catch (InterruptedException e) {}
+			
+			//waiting for a command to be received from invoker thread ( gertboard)
+			while (!Command.isExecute()) {
+				try {
+					synchronized (Command.getInstance()) {
+						Command.getInstance().wait();
 					}
-				}
-				
-				
-				//decode the command
-				if(Command.getCommandCode().equalsIgnoreCase("flash")){
-					out.println("flash");
-				}
-				
-				 
-				
-				// set the execute to false upon finishing the command proccessing 
-				synchronized (Command.getInstance()) {
-					Command.setExecute(false);
-				}
+				} catch (InterruptedException e) {}
+			}
+
+			// decode the command; send the signal to the piface if the code "1" received
+			if (Command.getCommandCode().equalsIgnoreCase("1")) {
+				System.out.println("piFace Flashed");
+			}
+
+			// set the execute to false upon finishing the command proccessing
+			synchronized (Command.getInstance()) {
+				Command.setExecute(false);
+			}
 		   }
 		}
 }

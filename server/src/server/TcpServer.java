@@ -8,24 +8,24 @@ public class TcpServer {
 	ServerSocket Socket;
 	Socket connectionSocket;
 	Thread invokerThread, flasherThread;
-	 Boolean lock;
 	
 
 	public void serverSetup(){
 		
-		/*
+		
 			try {
-				Socket = new ServerSocket(5005);
+				Socket = new ServerSocket(5006);
 				connectionSocket = Socket.accept();
 			} catch (IOException e) {
 				System.err.println("connection gone wrong!");
 				e.printStackTrace();
 			}
-			Thread invokerThread= new Thread(new InvokerThread(connectionSocket,lock));
+			Thread invokerThread= new Thread(new InvokerThread(connectionSocket));
 			invokerThread.start();
-			*/
+			Thread FlasherThread= new Thread(new FlasherThread(connectionSocket));
+			FlasherThread.start();
 			
-			try {
+			/*try {
 				Socket = new ServerSocket(5005);
 				connectionSocket = Socket.accept();
 			} catch (IOException e) {
@@ -34,7 +34,15 @@ public class TcpServer {
 			}		
 			Thread FlasherThread= new Thread(new FlasherThread(connectionSocket,lock));
 			FlasherThread.start();
-		
+		*/
+			try {
+				invokerThread.join();
+				FlasherThread.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		
+			
 	}
 	
 

@@ -8,32 +8,40 @@ import java.net.Socket;
  class InvokerThread implements Runnable {
 	Socket connectionSocket;
 	Boolean commandReceived;
+	BufferedReader in;
 	
-	public InvokerThread(Socket connectionSocket,Boolean lock) {
+	public InvokerThread(Socket connectionSocket) {
 		super();
 		this.connectionSocket = connectionSocket;
-		this.commandReceived=lock;
 		Command.getInstance(); 
 	}
 
 
 	public void run() {
 		try {
-			BufferedReader in= new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-			
-			//notify the flasher thread upon receiving a singal from the flasher raspi and storing it as command code
-			synchronized (Command.getInstance()) {
-				Command.setCommandCode(in.readLine());
-				Command.setExecute(true);
-				notify();
-			}
-			
-			
-			
+			in= new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+			for(;;){
+				//notify the flasher thread upon receiving a singal from the flasher raspi and storing it as command code
+				
+					try {
+						Command.setCommandCode(in.readLine());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					System.out.println(Command.getCommandCode().toString()+"cmd code"+Command.getCommandCode());
+					synchronized (Command.getInstance()) {
+					Command.setExecute(true);
+					Command.getInstance().notifyAll();
+				}
+			}
+			
+			
+		
 		
 	}
 }	
