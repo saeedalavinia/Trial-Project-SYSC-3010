@@ -35,6 +35,8 @@ class FlasherThread implements Runnable{
 			// decode the command; send the signal to the piface if the code "1" received
 			if (Command.getCommandCode().equalsIgnoreCase("1")) {
 				System.out.println("piFace Flashed");
+				out.println("piFace Flashed");
+				out.flush();
 			}
 
 			// set the execute to false upon finishing the command proccessing
