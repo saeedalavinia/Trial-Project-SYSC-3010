@@ -22,19 +22,18 @@ public class TcpServer {
 			}
 			Thread invokerThread= new Thread(new InvokerThread(connectionSocket));
 			invokerThread.start();
-			Thread FlasherThread= new Thread(new FlasherThread(connectionSocket));
-			FlasherThread.start();
 			
-			/*try {
-				Socket = new ServerSocket(5005);
+			
+			try {
+				Socket = new ServerSocket(5006);
 				connectionSocket = Socket.accept();
 			} catch (IOException e) {
 				System.err.println("connection gone wrong!");
 				e.printStackTrace();
 			}		
-			Thread FlasherThread= new Thread(new FlasherThread(connectionSocket,lock));
+			Thread FlasherThread= new Thread(new FlasherThread(connectionSocket));
 			FlasherThread.start();
-		*/
+		
 			try {
 				invokerThread.join();
 				FlasherThread.join();
