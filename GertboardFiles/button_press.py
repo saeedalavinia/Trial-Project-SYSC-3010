@@ -5,6 +5,10 @@
 # Use at your own risk - I'm pretty sure the code is harmless, 
 # but check it yourself.
 
+#Eddited button_press.py by Volodymyr Sharovar
+#Reads the GPIO pins 23-25. If the state was different from the previous
+#state of the pins that means buttons were pressed. Returns that the button was
+#pressed and the state of the buttons 
 import RPi.GPIO as GPIO
 import time
 import sys

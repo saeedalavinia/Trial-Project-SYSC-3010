@@ -1,14 +1,17 @@
 #!/usr/bin/env python
 
+#Written by Volodymyr Sharovar
+#Connects to designated server. Check for a button press. 
+#If button was pressed, send the string representation of
+#the state of buttons to the server
+
 import socket
 import time
 import sys
 from button_press import button_press
 
 TCP_IP = '134.117.58.33'
-#TCP_IP = '10.0.0.53'
 TCP_PORT = 4000
-#TCP_PORT = 5005
 BUFFER_SIZE = 1024
 
 try:

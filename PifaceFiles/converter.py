@@ -1,28 +1,32 @@
-#Code written by Raditya Budianto(100836539) and Vlad
+#Code written by Raditya Budianto(100836539) and Volodymyr Sharovar
 
 import piface.pfio as pfio
 
-def decimalToBinaryConverter(number):    
+#Takes a decimal number and converts it to a binary list. Depending on 
+#the binary number turns on/off the LED on piface
+def decimalToBinaryConverter(numberToConver):    
 
     pfio.init()
-    x=list(bin(number))
-    y= []
+    binaryListOfNumberToConvert=list(bin(numberToConver))
+    binaryListOfBinaryNumber = []
      
-    for i in range(len(x)-1, 0, -1):
-        if x[i] == 'b':
+    for i in range(len(binaryListOfNumberToConvert)-1, 0, -1):
+        if binaryListOfNumberToConvert[i] == 'b':
             break
        
-        y.append(x[i])
+        binaryListOfBinaryNumber.append(binaryListOfNumberToConvert[i])
        
-    for k in range(len(y),8):
-        y.append(0)
+    for i in range(len(binaryListOfBinaryNumber),8):
+        binaryListOfBinaryNumber.append(0)
     
     for i in range(7,-1,-1):
-        if y[i] == "1":
+        if binaryListOfBinaryNumber[i] == "1":
             pfio.digital_write(i,1)
         else:
             pfio.digital_write(i,0)        	
 
+#Accepts a string of data and the sum. Depending on the string performs
+#addition, subtraction or setting to zero on the sum. 
 def dataParser(data, sum):
 
     if data == "[0, 0, 0]\n":
