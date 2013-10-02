@@ -5,15 +5,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+
+
+//@ connectionSocket: the socket connection passed from tcpserver class (live connection with Invoker device)
+
  class InvokerThread implements Runnable {
 	Socket connectionSocket;
-	Boolean commandReceived;
 	BufferedReader in;
 	
 	public InvokerThread(Socket connectionSocket) {
 		super();
 		this.connectionSocket = connectionSocket;
-		Command.getInstance(); 
+		Command.getInstance();  
 	}
 
 
@@ -21,7 +24,6 @@ import java.net.Socket;
 		try {
 			in= new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 			for(;;){
@@ -30,10 +32,13 @@ import java.net.Socket;
 					try {
 						Command.setCommandCode(in.readLine());
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					
+					
 					System.out.println(Command.getCommandCode().toString()+"cmd code"+Command.getCommandCode());
+					
+					// set the execute from command object to true with concurrency measures.
 					synchronized (Command.getInstance()) {
 					Command.setExecute(true);
 					Command.getInstance().notifyAll();
