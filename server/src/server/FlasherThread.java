@@ -23,7 +23,7 @@ class FlasherThread implements Runnable{
 		
 		while(true){
 			
-			//waiting for a command to be received from invoker thread ( gertboard)
+			// "wait"ing for a command to be received from invoker thread ( gertboard)
 			while (!Command.isExecute()) {
 				try {
 					synchronized (Command.getInstance()) {
@@ -32,17 +32,33 @@ class FlasherThread implements Runnable{
 				} catch (InterruptedException e) {}
 			}
 
-			// decode the command; send the signal to the piface if the code "1" received
-			if (Command.getCommandCode().equalsIgnoreCase("1")) {
-				System.out.println("piFace Flashed");
-				out.println("piFace Flashed");
+			// decode the command and forward the mapped command to flasher deveice
+			if (Command.getCommandCode().equalsIgnoreCase("[0, 1, 1]")) {
+				System.out.println("Button pressed\n");
+				out.println("[1, 0, 0]");
 				out.flush();
+			}else if(Command.getCommandCode().equalsIgnoreCase("[1, 0, 1]")){
+				System.out.println("Button pressed\n");
+				out.println("[0, 1, 0]");
+			    out.flush();
+			}else if(Command.getCommandCode().equalsIgnoreCase("[1, 1, 0]")){
+				System.out.println("Button pressed\n");
+				out.println("[0, 0, 1]");
+			    out.flush();
+			}else if(Command.getCommandCode().equalsIgnoreCase("[1, 1, 1]")){
+				System.out.println("Button released\n");
+				out.println("[0, 0, 0]");
+			    out.flush();
+			}else{
+				System.out.println("done sending\n");
+				System.out.println("Done");
+			    //out.flush();
 			}
+				
 
-			// set the execute to false upon finishing the command proccessing
+			// set the execute to false upon finishing the command proccessing with concurrency measures.
 			synchronized (Command.getInstance()) {
 				Command.setExecute(false);
 			}
 		   }
 		}
-}
