@@ -1,8 +1,8 @@
 package server;
 
-//Command is a singleton class. the command code will be stored in this object before sent to other raspi clients
+//Command is a singleton class. the command code will be stored in this object before sent to other raspi clients. 
 
-//@command : the only instance of this singleton class
+//@command :The only instance of this singleton class. Flasher nad Invoker thread can synchronize on this instance.
 //@ commandCode: the comand code is decoded to generate the correct code for the flasher raspi
 //@execute : used for signalling execution of a command
 class Command {
